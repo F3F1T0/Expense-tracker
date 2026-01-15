@@ -32,7 +32,7 @@ def main():
     args = parser.parse_args()
     match args.command:
         case "add":
-            pass
+            expenses.add_expense(args.description, args.amount)
         case "list":
             pass
         case "update":
