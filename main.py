@@ -37,9 +37,9 @@ def main():
         case "list":
             expenses.list_expenses()
         case "update":
-            pass
+            expenses.update_expense(args.id, args.amount)
         case "delete":
-            pass
+            expenses.delete_expense(args.id)
         case "summary":
             expenses.summary_expenses(args.month)
         case _:

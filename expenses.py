@@ -4,6 +4,16 @@ import csv
 
 
 FILE = "expenses.csv"
+FIELDS = ['id', 'date', 'description', 'amount']
+
+def save_all_expenses(lista_gastos):
+    # Usamos 'w' para borrar el archivo viejo y escribir la nueva lista completa
+    with open(FILE, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=FIELDS)
+        writer.writeheader()
+        writer.writerows(lista_gastos) # Escribe todas las filas de un tirón
+
+
 # Function of add expense
 
 def load_expenses():
@@ -53,11 +63,10 @@ def add_expense(desc, amount):
     }
 
     # Save expense
-    fields = ['description', 'amount', 'id', 'date']
 
     with open(FILE, 'a') as csvfile:
         
-        writer = csv.DictWriter(csvfile, fieldnames = fields)
+        writer = csv.DictWriter(csvfile, fieldnames=FIELDS)
 
         if csvfile.tell() == 0:
             writer.writeheader()
@@ -90,6 +99,9 @@ def summary_expenses(month):
         if month is None:
             for i in expenses_list:
                 total = total + float(i['amount'])
+            print(f"\nTotal expenses: {total}")
+        elif month < 1 or month > 12:
+            print("That month is not valid.")
         else:
             for i in expenses_list:
                 date = i['date'].split('-')
@@ -97,13 +109,48 @@ def summary_expenses(month):
 
                 if expense_month == month:
                     total = total + float(i['amount'])
- 
+            print(f"\nTotal expenses: {total}")
         
-        print(f"\nTotal expenses: {total}")
+        
 
     else:
         print(f"There aren't any expenses at the moment")
 
+def update_expense(id_buscar, nuevo_monto):
+    flag = False
+    if os.path.exists(FILE):
+        expenses = load_expenses()
+        
+        for i in expenses:
+            if int(i['id']) == int(id_buscar):
+                i['amount'] = nuevo_monto
+                flag = True 
+                
+                print("Updated successfully. New data:")
+                print(f"ID: {i['id']} | Description: {i['description']} | Amount: {i['amount']}")
+                break 
+
+        if flag:
+            save_all_expenses(expenses) 
+        else:
+            print(f"The id {id_buscar} hasn't been found.")
+    else:
+        print("There aren't any expenses.")
 
 
+def delete_expense(id):
+    flag = False
+    if os.path.exists(FILE):
+        expenses = load_expenses()
+        for i in expenses:
+            if int(i['id']) == int(id):
+                expenses.remove(i)
+                flag = True
+                break
+    if flag:
+        print(f"The expense with the id '{id}' has been eliminated.")
+        save_all_expenses(expenses) 
+
+    else: 
+        print("ID not found.")
 
