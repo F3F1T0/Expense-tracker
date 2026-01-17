@@ -26,6 +26,7 @@ def main():
     sum_parser = subparsers.add_parser("summary",help="Summarize the expenses")
     sum_parser.add_argument("--month",required=False,type=int,help="Add month to summarize")
 
+    
 
     
     
@@ -34,13 +35,13 @@ def main():
         case "add":
             expenses.add_expense(args.description, args.amount)
         case "list":
-            pass
+            expenses.list_expenses()
         case "update":
             pass
         case "delete":
             pass
         case "summary":
-            pass
+            expenses.summary_expenses(args.month)
         case _:
             print("That argument is not valid.")
     
